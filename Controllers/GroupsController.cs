@@ -22,7 +22,9 @@ namespace Contacts.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
         {
-            return await _context.Groups.ToListAsync();
+            return await _context.Groups
+                                .Include(group => group.Contacts)
+                                .ToListAsync();
         }
 
         [HttpGet("{id}")]
