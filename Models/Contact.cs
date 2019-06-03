@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 
 namespace Contacts.Models
 {
@@ -9,6 +10,7 @@ namespace Contacts.Models
         public string Email { get; set; }
 
         public int GroupId { get; set; }
+        [JsonIgnore]
         public Group Group { get; set; }
     }
 }
