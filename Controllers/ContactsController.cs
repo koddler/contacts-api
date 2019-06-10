@@ -56,5 +56,26 @@ namespace Contacts.Controllers
 
             return CreatedAtAction(nameof(GetContact), new { id = contact.ContactId }, contact);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Contact>> PutContact(int id, Contact contact)
+        {
+            if (id != contact.ContactId)
+            {
+                return NotFound(new { Error = $"Contact with id {id} not found" });
+            }
+
+            try
+            {
+                _context.Entry(contact).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(new { Error = e.InnerException.Message });
+            }
+
+            return contact;
+        }
     }
 }
