@@ -49,5 +49,19 @@ namespace Contacts.Controllers
 
             return CreatedAtAction(nameof(GetGroup), new { id = group.GroupId }, group);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Group>> PutGroups(int id, Group group)
+        {
+            if (id != group.GroupId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(group).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return group;
+        }
     }
 }
