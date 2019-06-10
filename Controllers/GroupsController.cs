@@ -63,5 +63,20 @@ namespace Contacts.Controllers
 
             return group;
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGroup(int id)
+        {
+            var group = await _context.Groups.FindAsync(id);
+            if (group == null)
+            {
+                return NotFound(new { Error = $"Group with id {id} not found" });
+            }
+
+            _context.Groups.Remove(group);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
