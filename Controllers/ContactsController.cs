@@ -77,5 +77,27 @@ namespace Contacts.Controllers
 
             return contact;
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteContact(int id)
+        {
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact == null)
+            {
+                return NotFound(new { Error = $"Contact with id {id} not found" });
+            }
+
+            try
+            {
+                _context.Contacts.Remove(contact);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(new { Error = e.InnerException.Message });
+            }
+        }
     }
 }
