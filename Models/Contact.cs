@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using CsvHelper.Configuration;
 
 namespace Contacts.Models
 {
@@ -12,5 +13,14 @@ namespace Contacts.Models
         public int GroupId { get; set; }
         [JsonIgnore]
         public Group Group { get; set; }
+    }
+
+    public sealed class ContactMap : ClassMap<Contact>
+    {
+        public ContactMap()
+        {
+            AutoMap();
+            Map(m => m.ContactId).Ignore();
+        }
     }
 }
