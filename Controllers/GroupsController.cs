@@ -31,6 +31,7 @@ namespace Contacts.Controllers
         public async Task<ActionResult<Group>> GetGroup(int id)
         {
             var group = await _context.Groups.FindAsync(id);
+            _context.Entry(group).Collection(g => g.Contacts).Load();
 
             if (group == null)
             {
