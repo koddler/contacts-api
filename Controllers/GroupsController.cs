@@ -51,7 +51,7 @@ namespace Contacts.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Group>> PutGroups(int id, Group group)
+        public async Task<ActionResult<Group>> PutGroup(int id, Group group)
         {
             if (id != group.GroupId)
             {
