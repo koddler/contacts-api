@@ -48,8 +48,8 @@ namespace Contacts.Controllers
                         }
 
                         _context.Contacts.Add(contact);
-                        await _context.SaveChangesAsync();
                     }
+                    await _context.SaveChangesAsync();
                 }
             }
             catch (System.Exception e)
