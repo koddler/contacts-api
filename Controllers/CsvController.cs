@@ -56,7 +56,7 @@ namespace Contacts.Controllers
             {
                 System.Console.WriteLine($"__LOG__ error occurred");
                 System.Console.WriteLine(e);
-                return BadRequest(new { Error = e.InnerException.Message });
+                return BadRequest(new { Error = e });
             }
 
             return Ok();
