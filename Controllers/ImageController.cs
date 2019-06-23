@@ -79,5 +79,48 @@ namespace Contacts.Controllers
                 return StatusCode(500, new { Error = "Internal Server Error" });
             }
         }
+
+        private void PatchContact(Contact _contact, Contact contact)
+        {
+            if (contact.Name != null)
+            {
+                _contact.Name = contact.Name;
+            }
+            if (contact.Phone != null)
+            {
+                _contact.Phone = contact.Phone;
+            }
+            if (contact.Email != null)
+            {
+                _contact.Email = contact.Email;
+            }
+            if (contact.Avatar != null)
+            {
+                _contact.Avatar = contact.Avatar;
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<Contact>> PatchContact(int id, [FromForm] IFormFile file, [FromForm] Contact contact)
+        {
+            var _contact = await _context.Contacts.FindAsync(id);
+            if (_contact == null)
+            {
+                return NotFound(new { Error = $"Contact with id {id} not found" });
+            }
+
+            try
+            {
+                PatchContact(_contact, contact);
+                _context.Entry(_contact).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception e)
+            {
+                return BadRequest(new { Error = e.Message });
+            }
+
+            return Ok(new { _contact });
+        }
     }
 }
