@@ -18,6 +18,7 @@ namespace Contacts.Controllers
     public class CsvController : ControllerBase
     {
         private const string CACHE_KEY_COUNT = "CACHE_KEY_COUNT";
+        private const string CACHE_KEY_TOTAL = "CACHE_KEY_TOTAL";
         private readonly ContactsContext _context;
         private IMemoryCache _cache;
 
@@ -30,14 +31,21 @@ namespace Contacts.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            int count;
+            int count, total;
+            double progress = 0.0;
             if (!_cache.TryGetValue(CACHE_KEY_COUNT, out count))
             {
                 count = 0;
             }
+            if (!_cache.TryGetValue(CACHE_KEY_TOTAL, out total))
+            {
+                total = 0;
+            }
 
             await Task.Delay(0);
-            return Ok(new { count });
+
+            progress = Math.Truncate((double)count / total * 100);
+            return Ok(new { count, total, progress });
         }
 
         [HttpPost]
@@ -56,8 +64,12 @@ namespace Contacts.Controllers
                 {
                     csv.Configuration.RegisterClassMap<ContactMap>();
                     var contacts = csv.GetRecords<Contact>();
+                    var contactsList = contacts.ToList();
+
                     int count = 0;
-                    foreach (var contact in contacts)
+                    _cache.Set(CACHE_KEY_TOTAL, contactsList.Count);
+
+                    foreach (var contact in contactsList)
                     {
                         var group = await _context.Groups.FindAsync(contact.GroupId);
                         if (group == null)
