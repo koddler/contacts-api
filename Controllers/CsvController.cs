@@ -44,7 +44,9 @@ namespace Contacts.Controllers
 
             await Task.Delay(0);
 
-            progress = Math.Truncate((double)count / total * 100);
+            if (total != 0)
+                progress = Math.Truncate((double)count / total * 100);
+
             return Ok(new { count, total, progress });
         }
 
