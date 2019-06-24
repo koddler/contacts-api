@@ -63,6 +63,7 @@ namespace Contacts.Controllers
 
                     _context.Contacts.Add(contact);
                     await _context.SaveChangesAsync();
+                    contact.Avatar = url;
 
                     return Ok(new { contact });
                 }
